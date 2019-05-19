@@ -1,0 +1,73 @@
+// ConsoleApplication20.cpp: 定义控制台应用程序的入口点。
+//
+
+#include "stdafx.h"
+#include<iostream>
+#include<string>
+using namespace std;
+typedef struct str
+{
+	string ming;
+	int num;
+	struct str *next;
+}Name;
+typedef struct b
+{
+	bool s = false;
+	Name * c;
+}B;
+int main()
+{
+	
+	int n;
+	cin >> n;
+	B *p = new B[1000000];
+	Name *names = new Name[n];
+	for (int i = 0; i < n; i++)
+	{
+		cin >> names[i].ming;
+		names[i].num = 0;
+		names[i].next = NULL;
+		int L = names[i].ming.length();
+		for (int j = 0; j < L; j++)
+		{
+			if (names[i].ming[j] <= 122 && names[i].ming[j] >= 97)
+			{
+				names[i].ming[j] -= 32;
+			}
+			names[i].num += (j + 1)* int(names[i].ming[j]);
+		}	
+		p[names[i].num].s = false;
+		p[names[i].num].c = NULL;
+	}
+	for (int k = 0; k < n; k++)
+	{
+		if (p[names[k].num].s == false)
+		{
+			p[names[k].num].s = true;
+			p[names[k].num].c= &names[k];
+			cout << "No" << endl;
+		}
+		else if(p[names[k].num].s == true)
+		{
+			Name * x = p[names[k].num].c;
+			while (names[k].ming != x->ming)
+			{
+				x = x->next;
+				if (x == NULL)
+				{
+					names[k].next = p[names[k].num].c;
+					p[names[k].num].c = &names[k];
+					p[names[k].num].s = true;
+					cout << "No" << endl;
+					break;
+				}
+			}
+			if (x != NULL)
+			{
+				p[names[k].num].s = true;
+				cout << "Yes" << endl;
+			}
+		}
+	}
+}
